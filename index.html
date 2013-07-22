@@ -109,7 +109,7 @@
 					</section>
 				</section>
 
-				<section data-state="ceil">
+				<section>
 					<section>
 						<h3>Node is asynchronous</h3>
 						<p>... which lets it handle lots of different things simultaneously.</p>
@@ -124,10 +124,37 @@
 					</section>
 				</section>
 
-				<section data-state="ceil">
+				<section>
 					<section>
 						<h3>Node uses an event-loop to perform non-blocking and asynchronous I/O</h3>
 						<p>an event-loop is a mechanism which allows you to specify what happens when a particular event occurs. You can think of it as a simple list of tasks bound to be executed when a certain event occurs.</p>
+					</section>
+					<section>
+						<p>consider this jQuery code...</p>
+						<pre><code data-trim contenteditable>
+$.post('/resource.json',			// I/O does not block execution
+	function (data) {
+		console.log(data)
+});						
+						</code></pre>
+						<aside class="notes">
+							This jQuery program performs an HTTP request resource.json. When the response comes back, an anonymous function is called (the "callback") containing the argument data.
+
+							If this code is blocking execution, since browsers are single threaded, if this requests took 400ms to return, any other events happening on that timeframe would wait until data comes back. Imagine the poor user experience.
+						</aside>
+						<img src="images/browser_event_loop.png">
+					</section>
+					<section>
+						<p>Node.js simply extends this idea to I/O operations: when you start an operation like reading a file, you can pass control to back to Node and have your code run when the data has been read. For example:</p>
+						<pre><code data-trim contenteditable>
+// read the file /etc/passwd, and call console.log on the returned data
+fs.readFile('/etc/passwd', function(err, data){
+  console.log(data);
+});						
+						</code></pre>
+					</section>
+					<section>
+						<img src="images/node_event_loop.png">
 					</section>
 				</section>
 
@@ -153,11 +180,24 @@
 					<section>
 						<h3>Installation</h3>
 					</section>
+					<section>
+						<h3>Windows</h3>
+						<p>Download pre-compiled binaries from <a href="http://nodejs.org/download">http://nodejs.org/download</a></p>
+						<br />
+						<br />
+						<h3>Linux / Unix</h3>
+						<pre><code data-trim contenteditable>
+$ git clone https://github.com/joyent/node
+$ cd node
+$ configure 
+$ make && make install
+						</code></pre>
+					</section>
 				</section>
 
 				<section>
 					<section>
-						
+						<h3>Ready for actual coding</h3>
 					</section>
 				</section>
 
