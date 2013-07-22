@@ -48,7 +48,7 @@
 
 				<!-- Brief history -->
 				<section>
-					<h3>Brief History</h3>
+					<h3>A Very Brief History</h3>
 					<ul>
 						<li>
 							created by Ryan Dahl
@@ -115,9 +115,49 @@
 						<p>... which lets it handle lots of different things simultaneously.</p>
 					</section>
 					<section>
+						<h3>Asynchronous?</h3>
+					</section>
+					<section>
 						<h3>consider this analogy...</h3>
 						<p>You go down to a fast food joint and order a cheeseburger, they will immediately take your order and then make you wait around until the cheeseburger is ready. In the meantime they can take other orders and start cooking cheeseburgers for other people. Imagine if you had to wait at the register for your cheeseburger, blocking all other people in line from ordering while they cooked your burger! This is called blocking I/O because all I/O (cooking cheeseburgers) happens one at a time. Node, on the other hand, is non-blocking, which means it can cook many cheeseburgers at once.
 						</p>
+					</section>
+				</section>
+
+				<section data-state="ceil">
+					<section>
+						<h3>Node uses an event-loop to perform non-blocking and asynchronous I/O</h3>
+						<p>an event-loop is a mechanism which allows you to specify what happens when a particular event occurs. You can think of it as a simple list of tasks bound to be executed when a certain event occurs.</p>
+					</section>
+				</section>
+
+				<section data-state="ceil">
+					<section>
+						<h3>Core modules</h3>
+						<p>Node has small group of modules (referred to as 'node core') presented to the public as API that you are intended to write programs with.</p>
+						<ul>
+							<li><code>fs</code> - file system handling</li>
+							<li><code>http, net, dgram</code> - for working with network systems</li>
+							<li><code>os</code> - module for getting os information</li>
+							<li><code>url, querystring, path</code> - for parsing urls and paths</li>
+							<li><code>dns</code> - module for asynchronously resolving DNS queries</li>
+						</ul>
+						<p>and a lot more...</p>
+						<br />
+						<br />
+						<a href="http://nodejs.org/api/" target="_blank"><small>http://nodejs.org/api/</small></a>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3>Installation</h3>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						
 					</section>
 				</section>
 
