@@ -1,5 +1,5 @@
-<!doctype html>
 <html lang="en">
+<!doctype html>
 
 	<head>
 		<meta charset="utf-8">
@@ -43,12 +43,13 @@
 			<div class="slides">
 				<!-- Main slide -->
 				<section>
-					<h1>Introduction to Node.js</h1>
+					<h2>Introduction to Node.js</h2>
+					<p>Prof. Christian Maderazo, James Santos</p>
 				</section>
 
 				<!-- Brief history -->
 				<section>
-					<h3>A Very Brief History</h3>
+					<h2>A Very Brief History</h2>
 					<ul>
 						<li>
 							created by Ryan Dahl
@@ -69,9 +70,7 @@
 				<section data-state="ceil">
 					<section>		
 						<h2>What is Node.js?</h2>
-						<p>
-							Node.js is an event-driven I/O framework.
-						</p>
+						<p>Node.js is an event-driven I/O framework.</p>
 
 						<aside class="notes">
 							That's it! It's a simple and stable I/O platform built on top of Google's V8 javascript engine.
@@ -80,6 +79,17 @@
 
 							It's an open source project developed by Ryan Dahl and is designed to help us write Javascipt programs that talk to networks, file systems or other I/O sources.
 						</aside>
+					</section>
+					<section>
+						<h2>What is Node.js?</h2>
+						<p>Node.js is an event-driven I/O framework.</p>
+						<p>Good at handling lots of different I/O connections at the same time.</p>
+					</section>
+					<section>
+						<h2>What is Node.js?</h2>
+						<p>Node.js is an event-driven server-side javascript I/O framework.</p>
+						<p>Good at handling lots of different I/O connections at the same time.</p>
+						<p>Achieves this by making all network I/O non-blocking and file I/O <strong>asynchronous</strong></p>
 					</section>
 					<section>
 						<h3>Node is not</h3>
@@ -109,32 +119,204 @@
 					</section>
 				</section>
 
-				<section>
+				<section data-state=ceil>
+					<h2>Node Basics</h2>
+					<ul>
+						<li>Javascript</li>
+						<li>Asynchronous</li>
+						<li>Non-blocking I/O</li>
+						<li>Evented</li>
+					</ul>
+				</section>
+
+				<section data-state=ceil><h2>Javascript</h2></section>
+
+				<section data-state=ceil>
 					<section>
-						<h3>Node is asynchronous</h3>
-						<p>... which lets it handle lots of different things simultaneously.</p>
+						<h3>Prototype-based programming</h3>
+						<p> - Javascript has no classess</p>
+						<p> - Instead, function defines objects</p>
+						<pre><code>
+function Person () {}
+var p = new Person()							
+						</code></pre>
 					</section>
 					<section>
-						<h3>Asynchronous?</h3>
+						<h3>Classless programming</h3>
+						<p>What classes can do for us?</p>
+						<ul>
+							<li>Define local scope and namespaces</li>
+							<li>Allow private attribute and methods</li>
+							<li>Encapsulate code</li>
+							<li>Organize applications in an object oriented way</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Prototype-based programming</h3>
+						<pre><code>
+function Person (firstname, lastname) {
+	this.firstname = firstname;
+	this.lastname = lastname;
+}
+
+// Public method 'fullName'
+Person.prototype.fullName = function() {
+	return this.firstname + this.lastname;
+}
+
+var p = new Person('Juan', 'dela Cruz');
+						</code></pre>
+					</section>
+					<section>
+						<h3>Anti-Patterns: Javascript Imports</h3>
+						<ul>
+							<li>Spread code around files</li>
+							<li>Link libraries</li>
+							<li>No way to maintain private local scope/states/namespace</li>
+							<li>
+								Leads to:
+								<br>
+								- Name collisions
+								<br>
+								- Unnecessary access
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Patterns: Modules</h3>
+						<ul>
+							<li>An elegant way of encapsulating and reusing code</li>
+							<li>Takes advantage of the anonymous closure features of Javascript</li>
+							<li>Adopted by Node.js</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Anatomy of a module</h3>
+						<pre><code>
+var ageLimit = 50; // private
+
+module.exports = Person
+
+function Person (firstname, lastname, age) {
+	this.firstname = firstname;
+	this.lastname = lastname;
+	this.age = age;
+}
+
+Person.prototype.belowAgeLimit = function () {
+	return this.age < ageLimit;
+}							
+						</code></pre>
+					</section>
+					<section>
+						<h3>Node modules</h3>
+						<pre><code>
+var http = require('http'),
+  fs = require('fs'),
+  mongoose = require('mongoose');
+						</code></pre>
+						<p>If you've programmed in Node, this looks familiar</p>
+					</section>
+					<section>
+						<h3>Modules in the Wild</h3>
+						<pre><code>
+var express = require('express');
+var fs = require('fs');
+var io = require('socket.io');
+var crypto = require('crypto');
+
+var app	= express.createServer();
+var staticDir = express.static;
+
+io = io.listen(app);
+
+var opts = {
+  port: 1948,
+  baseDir : __dirname + '/../../'
+};
+
+io.sockets.on('connection', function(socket) {
+	socket.on('slidechanged', function(slideData) {
+		if (typeof slideData.secret == 'undefined' || slideData.secret == null || slideData.secret === '') return;
+		if (createHash(slideData.secret) === slideData.socketId) {
+			slideData.secret = null;
+			socket.broadcast.emit(slideData.socketId, slideData);
+		};
+	});
+});
+
+app.configure(function() {
+	[ 'css', 'js', 'plugin', 'lib' ].forEach(function(dir) {
+		app.use('/' + dir, staticDir(opts.baseDir + dir));
+	});
+});
+
+app.get("/", function(req, res) {
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	fs.createReadStream(opts.baseDir + '/index.html').pipe(res);
+});
+
+app.get("/token", function(req,res) {
+	var ts = new Date().getTime();
+	var rand = Math.floor(Math.random()*9999999);
+	var secret = ts.toString() + rand.toString();
+	res.send({secret: secret, socketId: createHash(secret)});
+});
+
+						</code></pre>
+					</section>
+				</section>
+
+				<section data-state=ceil>
+					<h2>Asynchronous</h2>
+				</section>
+
+				<section data-state=ceil>
+					<section>
+						<h3>Asynchronous programming</h3>
+						<ul>
+							<li>Node.js is entirely asynchronous</li>
+						</ul>
 					</section>
 					<section>
 						<h3>consider this analogy...</h3>
 						<p>You go down to a fast food joint and order a cheeseburger, they will immediately take your order and then make you wait around until the cheeseburger is ready. In the meantime they can take other orders and start cooking cheeseburgers for other people. Imagine if you had to wait at the register for your cheeseburger, blocking all other people in line from ordering while they cooked your burger! This is called blocking I/O because all I/O (cooking cheeseburgers) happens one at a time. Node, on the other hand, is non-blocking, which means it can cook many cheeseburgers at once.
 						</p>
 					</section>
-				</section>
-
-				<section>
 					<section>
+						<h3>Asynchronous programming</h3>
+						<ul>
+							<li>Node.js is entirely asynchronous</li>
+							<li>You have to think differently</li>
+						</ul>
+					</section>
+					<section>
+						<h3>What's the output?</h3>
+						<pre><code>
+setTimeout(function () {
+  console.log('World')
+}, 0)
+
+console.log('Hello');							
+						</code></pre>
+					</section>
+					<section>
+						<h3>Asynchronous programming</h3>
+						<ul>
+							<li>Node.js is entirely asynchronous</li>
+							<li>You have to think differently</li>
+							<li>Failure to understand the event loop and I/O based model could lead to anti-patterns (bad code)</li>
+						</ul>
+					</section>
+					<aside class="notes">
 						<h3>Node uses an event-loop to perform non-blocking and asynchronous I/O</h3>
 						<p>an event-loop is a mechanism which allows you to specify what happens when a particular event occurs. You can think of it as a simple list of tasks bound to be executed when a certain event occurs.</p>
-					</section>
+					</aside>
 					<section>
 						<p>consider this jQuery code...</p>
 						<pre><code data-trim contenteditable>
-$.post('/resource.json',			// I/O does not block execution
-	function (data) {
-		console.log(data)
+$.post('/resource.json', function (data) {
+	console.log(data)
 });						
 						</code></pre>
 						<aside class="notes">
@@ -142,7 +324,7 @@ $.post('/resource.json',			// I/O does not block execution
 
 							If this code is blocking execution, since browsers are single threaded, if this requests took 400ms to return, any other events happening on that timeframe would wait until data comes back. Imagine the poor user experience.
 						</aside>
-						<img src="images/browser_event_loop.png">
+						<div style="text-align:center;"><img src="images/browser_event_loop.png"></div>
 					</section>
 					<section>
 						<p>Node.js simply extends this idea to I/O operations: when you start an operation like reading a file, you can pass control to back to Node and have your code run when the data has been read. For example:</p>
@@ -154,7 +336,7 @@ fs.readFile('/etc/passwd', function(err, data){
 						</code></pre>
 					</section>
 					<section>
-						<img src="images/node_event_loop.png">
+						<div style="text-align:center;"><img src="images/node_event_loop.png"></div>
 					</section>
 				</section>
 
@@ -218,8 +400,8 @@ $ make && make install
 				history: true,
 				center: true,
 
-				theme: 'night', // Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: 'linear', //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+				theme: 'moon', // Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: 'none', //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
