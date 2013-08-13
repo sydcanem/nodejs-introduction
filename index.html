@@ -73,11 +73,9 @@
 						<p>Node.js is an event-driven I/O framework.</p>
 
 						<aside class="notes">
-							That's it! It's a simple and stable I/O platform built on top of Google's V8 javascript engine.
+							It's a simple and stable I/O platform built on top of Google's V8 javascript engine.
 
 							V8 is a very complex virtual machine written by google. V8 is a javascript engine inside chrome.
-
-							It's an open source project developed by Ryan Dahl and is designed to help us write Javascipt programs that talk to networks, file systems or other I/O sources.
 						</aside>
 					</section>
 					<section>
@@ -120,12 +118,45 @@
 				</section>
 
 				<section data-state=ceil>
+					<section><h2>Why Node.js?</h2></section>
+					<section>
+						<ul>
+							<li>Asynchronous</li>
+						</ul>
+						<span>- Can handle a lot of concurrent I/O connections</span>
+					</section>
+					<section>
+						<ul>
+							<li>Asynchronous</li>
+							<li>Non-blocking</li>
+						</ul>
+						<span>- All code runs in a single thread</span>
+						<aside class="notes">
+							
+						</aside>
+					</section>
+					<section>
+						<ul>
+							<li>Asynchronous</li>
+							<li>Non-blocking</li>
+							<li>Javascript</li>
+						</ul>
+						<span>- Same language on the server and browser</span>
+						<aside class="notes">
+							Javascript is very flexible. You can do whatever you want with it, without limitations.
+							That's why there's alot of Javascript frameworks out there that is almost similar and solves the same problem. For DOM manipulation jQuery, Dojo, Prototype, Mootools, Zepto.
+							Front-end MV frameworks Backbone, Ember, Angular.
+
+							One thing that stands out is Javascript is naturally asynchronous. It allows us to code high-level asynchronous and non-blocking programs. Writing asynchronous code is as easy as a callback function which anyone who has written a jQuery event already knows how to do this.
+						</aside>
+					</section>
+				</section>
+
+				<section data-state=ceil>
 					<h2>Node Basics</h2>
 					<ul>
 						<li>Javascript</li>
 						<li>Asynchronous</li>
-						<li>Non-blocking I/O</li>
-						<li>Evented</li>
 					</ul>
 				</section>
 
@@ -292,12 +323,19 @@ app.get("/token", function(req,res) {
 					</section>
 					<section>
 						<h3>What's the output?</h3>
+						<p>PHP</p>
 						<pre><code>
+echo 'Hello';
+sleep(2);
+echo ' world.';							
+						</code></pre>
+						<p>Node.js</p>
+						<pre><code>					
 setTimeout(function () {
-  console.log('World')
-}, 0)
+  console.log(' world.')
+}, 2000)
 
-console.log('Hello');							
+console.log(' Hello');							
 						</code></pre>
 					</section>
 					<section>
@@ -338,6 +376,8 @@ fs.readFile('/etc/passwd', function(err, data){
 					<section>
 						<div style="text-align:center;"><img src="images/node_event_loop.png"></div>
 					</section>
+						
+					</section>
 				</section>
 
 				<section data-state="ceil">
@@ -356,6 +396,9 @@ fs.readFile('/etc/passwd', function(err, data){
 						<br />
 						<a href="http://nodejs.org/api/" target="_blank"><small>http://nodejs.org/api/</small></a>
 					</section>
+					<aside class="notes">
+						The interface for these modules are all asynchronous. Some of these modules also has synchronous api.
+					</aside>
 				</section>
 
 				<section>
@@ -403,8 +446,16 @@ $ make && make install
 				theme: 'moon', // Reveal.getQueryHash().theme, // available themes are in /css/theme
 				transition: 'none', //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
+				multiplex: {
+					secret: null,
+					id: '4147d89dba9e3a8e',
+					url: 'revealjs.jit.su:80'
+				},
+
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
+					{ src: '//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js', async: true },
+        			{ src: 'plugin/multiplex/client.js', async: true },
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
